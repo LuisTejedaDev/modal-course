@@ -20,6 +20,7 @@ export default () => {
                 visibility={visibility}
                 dismissable={true}
                 handleDismiss={() => setVisibility(false)}
+                type={"fade"}
             >
                 <View style={styles.saleContainer}>
                     <View style={styles.sections}>

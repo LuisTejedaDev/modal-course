@@ -2,7 +2,9 @@ import { useEffect } from "react"
 import {Keyboard, StyleSheet, useWindowDimensions} from "react-native"
 import Animated, {Extrapolation, interpolate, interpolateColor, useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated"
 
-export default ({visibility = false, dismissable = true, handleDismiss = () => {}, children}) => {
+/* type = 'translate' | 'fade' | 'scale' */
+
+export default ({visibility = false, dismissable = true, handleDismiss = () => {}, type = 'translate', children}) => {
     
     const {height, width} = useWindowDimensions()
 
@@ -42,6 +44,18 @@ export default ({visibility = false, dismissable = true, handleDismiss = () => {
         ]
     }))
 
+    const fadeStyle = useAnimatedStyle(() => ({
+        opacity: animation.value
+    }))
+
+    const scaleStyle = useAnimatedStyle(() => ({
+        transform: [
+            {
+                scale: animation.value
+            }
+        ]
+    }))
+
     return(
         <>
             {/* Este es el contenedor del color de fondo del modal */}
@@ -61,7 +75,9 @@ export default ({visibility = false, dismissable = true, handleDismiss = () => {
             </Animated.View>
 
             {/* Contenedor de modal */}
-            <Animated.View style={[styles.modal, {maxHeight: maxHeight, maxWidth: maxWidth}, translateStyle]}>
+            <Animated.View
+                pointerEvents={visibility ? 'auto' : 'none'}
+                style={[styles.modal, {maxHeight: maxHeight, maxWidth: maxWidth}, type === 'translate' ? translateStyle : type === 'fade' ? fadeStyle : scaleStyle]}>
                 {
                     children
                 }
